@@ -1,0 +1,15 @@
+@use "./base.scss";
+
+// Synthesis callout - distinct styling for editorial overview at end of digests
+.callout[data-callout="abstract"] {
+  --callout-color: 130, 100, 180;
+  background: linear-gradient(135deg, rgba(130, 100, 180, 0.08), rgba(130, 100, 180, 0.02));
+  border-left: 4px solid rgb(130, 100, 180);
+  margin-top: 3rem;
+
+  .callout-title {
+    font-size: 1.1em;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+}
