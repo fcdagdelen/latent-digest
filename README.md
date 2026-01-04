@@ -1,18 +1,34 @@
-# Quartz v4
+# Latent Digest
 
-> “[One] who works with the door open gets all kinds of interruptions, but [they] also occasionally gets clues as to what the world is and what might be important.” — Richard Hamming
+Deep research essays on the intersection of **AI systems**, **cognitive architectures**, and **human-machine interfaces**.
 
-Quartz is a set of tools that helps you publish your [digital garden](https://jzhao.xyz/posts/networked-thought) and notes as a website for free.
-Quartz v4 features a from-the-ground rewrite focusing on end-user extensibility and ease-of-use.
+## About
 
-🔗 Read the documentation and get started: https://quartz.jzhao.xyz/
+These are time-clustered explorations—snapshots of intellectual preoccupations that don't seek coherence but sometimes find it anyway. The "latent" refers to what lies beneath the surface: hidden structures in language, cognition, and technical systems that these essays attempt to surface.
 
-[Join the Discord Community](https://discord.gg/cRFFHYye7t)
+## Navigation
 
-## Sponsors
+**Card View** — Browse articles as visual cards showing title, primary concept, and summary.
 
-<p align="center">
-  <a href="https://github.com/sponsors/jackyzha0">
-    <img src="https://cdn.jsdelivr.net/gh/jackyzha0/jackyzha0/sponsorkit/sponsors.svg" />
-  </a>
-</p>
+**Graph View** — Explore the knowledge graph to discover connections between essays. Articles are linked through shared concepts and explicit cross-references.
+
+**Concepts Sidebar** — Filter by research themes:
+
+- **Knowledge Graphs** — Graph-based knowledge representation and retrieval
+- **Memory Systems** — Persistence, consolidation, and principled decay
+- **Small Models** — Specialized sub-10B parameter models
+- **Cognitive Architecture** — Two-tier processing patterns
+- **Psyche Interfaces** — Language as archaeological data about the mind
+- **AI Experience Design** — UX patterns for AI products
+- **Bidirectional Context** — Mutual transformation in dialogue
+- **Neuroscience** — Brain models informing AI design
+- **AI-Native Development** — Building with AI-first tools
+- **Therapeutics** — Health and medical applications
+
+## Structure
+
+Each essay includes:
+- **Frontmatter** with title, date, tags, and summary
+- **Related section** linking to conceptually adjacent essays
+
+The site forms a knowledge hypergraph where essays connect through both hierarchical tags and lateral wikilinks.
