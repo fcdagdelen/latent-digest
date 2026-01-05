@@ -1,5 +1,17 @@
 @use "./base.scss";
 
+@font-face {
+  font-family: 'Comico';
+  src: url('/static/fonts/Comico-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+// Logo uses Comico
+.page-title {
+  font-family: 'Comico', var(--headerFont);
+}
+
 // Responsive layout improvements
 .page {
   box-sizing: border-box;
