@@ -44,7 +44,8 @@ const getTagKey = (tags: string[] | undefined): string => {
 const getGradientStyle = (tags: string[] | undefined): string => {
   const tagKey = getTagKey(tags)
   const colors = TAG_GRADIENTS[tagKey] || DEFAULT_GRADIENT
-  return `linear-gradient(135deg, ${colors[0]}22 0%, ${colors[1]}33 50%, ${colors[2]}22 100%)`
+  // Create a subtle gradient with low opacity (0x11 = ~7%, 0x18 = ~9%)
+  return `linear-gradient(135deg, ${colors[0]}11 0%, ${colors[1]}18 50%, ${colors[2]}11 100%)`
 }
 
 const getPrimaryTag = (tags: string[] | undefined): string => {

@@ -52,6 +52,31 @@ type NodeRenderData = GraphicsInfo & {
   label: Text
 }
 
+// Color palettes for each concept tag
+const TAG_COLORS: Record<string, string> = {
+  "knowledge-graphs": "#6366f1",
+  "memory-systems": "#0ea5e9",
+  "small-models": "#f59e0b",
+  "cognitive-architecture": "#ec4899",
+  "psyche-interfaces": "#8b5cf6",
+  "ai-experience-design": "#14b8a6",
+  "bidirectional-context": "#3b82f6",
+  "neuroscience": "#ef4444",
+  "ai-native-development": "#22c55e",
+  "therapeutics": "#06b6d4",
+}
+
+function getTagColor(tags: string[]): string | null {
+  for (const tag of tags) {
+    const parts = tag.split("/")
+    const tagKey = parts[parts.length - 1]
+    if (TAG_COLORS[tagKey]) {
+      return TAG_COLORS[tagKey]
+    }
+  }
+  return null
+}
+
 const localStorageKey = "graph-visited"
 function getVisited(): Set<SimpleSlug> {
   return new Set(JSON.parse(localStorage.getItem(localStorageKey) ?? "[]"))
@@ -193,16 +218,30 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     {} as Record<(typeof cssVars)[number], string>,
   )
 
-  // calculate color
+  // calculate color based on tag
   const color = (d: NodeData) => {
     const isCurrent = d.id === slug
     if (isCurrent) {
       return computedStyleMap["--secondary"]
-    } else if (visited.has(d.id) || d.id.startsWith("tags/")) {
-      return computedStyleMap["--tertiary"]
-    } else {
-      return computedStyleMap["--gray"]
     }
+
+    // Check if this is a tag node - use tag color
+    if (d.id.startsWith("tags/")) {
+      const tagKey = d.id.substring(5).split("/").pop() || ""
+      return TAG_COLORS[tagKey] || computedStyleMap["--tertiary"]
+    }
+
+    // For article nodes, use color based on their primary tag
+    const tagColor = getTagColor(d.tags)
+    if (tagColor) {
+      return tagColor
+    }
+
+    // Fallback colors
+    if (visited.has(d.id)) {
+      return computedStyleMap["--tertiary"]
+    }
+    return computedStyleMap["--gray"]
   }
 
   function nodeRadius(d: NodeData) {
@@ -416,7 +455,9 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
       })
 
     if (isTagNode) {
-      gfx.stroke({ width: 2, color: computedStyleMap["--tertiary"] })
+      const tagKey = nodeId.substring(5).split("/").pop() || ""
+      const tagStrokeColor = TAG_COLORS[tagKey] || computedStyleMap["--tertiary"]
+      gfx.stroke({ width: 2, color: tagStrokeColor })
     }
 
     nodesContainer.addChild(gfx)
