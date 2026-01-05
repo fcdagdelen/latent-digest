@@ -177,7 +177,7 @@ export default ((opts?: Partial<TagContentOptions>) => {
                     href={resolveRelative(fileData.slug!, page.slug!)}
                     class="tag-card-link internal"
                   >
-                    <article class="tag-card" style={`background: ${gradientStyle};`}>
+                    <article class="tag-card">
                       <div class="tag-card-accent" style={`background: ${accentColor};`}></div>
                       {primaryTag && (
                         <span class="tag-card-tag" style={`color: ${accentColor};`}>{primaryTag}</span>

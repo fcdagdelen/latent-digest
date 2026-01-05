@@ -93,7 +93,7 @@ export default ((userOpts?: Partial<Options>) => {
                 href={resolveRelative(fileData.slug!, page.slug!)}
                 class="card-link internal"
               >
-                <article class="article-card" style={`background: ${gradientStyle};`}>
+                <article class="article-card">
                   <div class="card-accent" style={`background: ${accentColor};`}></div>
                   {primaryTag && (
                     <span class="card-tag" style={`color: ${accentColor};`}>{primaryTag}</span>
