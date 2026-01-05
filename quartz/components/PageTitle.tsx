@@ -14,10 +14,17 @@ const PageTitle: QuartzComponent = ({ fileData, cfg, displayClass }: QuartzCompo
 }
 
 PageTitle.css = `
+@font-face {
+  font-family: 'Comico';
+  src: url('/static/fonts/Comico-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
 .page-title {
   font-size: 1.75rem;
   margin: 0;
-  font-family: var(--titleFont);
+  font-family: 'Comico', var(--headerFont);
 }
 `
 
