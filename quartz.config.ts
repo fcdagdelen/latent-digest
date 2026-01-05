@@ -8,8 +8,8 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Latent Digest",
-    pageTitleSuffix: " | Latent Digest",
+    pageTitle: "Archive Fever",
+    pageTitleSuffix: " | Archive Fever",
     enableSPA: true,
     enablePopovers: true,
     analytics: null,

@@ -1,4 +1,4 @@
-# Latent Digest
+# Archive Fever
 
 **🔗 [cemdagdelen.github.io/latent-digest](https://cemdagdelen.github.io/latent-digest)**
 
@@ -6,7 +6,7 @@ Deep research essays on the intersection of **AI systems**, **cognitive architec
 
 ## About
 
-These are time-clustered explorations—snapshots of intellectual preoccupations that don't seek coherence but sometimes find it anyway. The "latent" refers to what lies beneath the surface: hidden structures in language, cognition, and technical systems that these essays attempt to surface.
+These are time-clustered explorations—snapshots of intellectual preoccupations that don't seek coherence but sometimes find it anyway.
 
 ## Navigation
 

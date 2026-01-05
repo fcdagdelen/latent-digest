@@ -93,7 +93,7 @@ export default (() => {
 `
 
   ViewToggle.afterDOMLoaded = `
-const STORAGE_KEY = 'latent-digest-view-preference';
+const STORAGE_KEY = 'archive-fever-view-preference';
 let graphRendered = false;
 
 function initViewToggle() {
