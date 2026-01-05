@@ -16,6 +16,22 @@ const defaultOptions = (cfg: GlobalConfiguration): Options => ({
   sort: byDateAndAlphabetical(cfg),
 })
 
+// Color palettes for each concept - [primary, secondary, accent]
+const TAG_GRADIENTS: Record<string, [string, string, string]> = {
+  "knowledge-graphs": ["#6366f1", "#8b5cf6", "#a78bfa"],      // Indigo-violet
+  "memory-systems": ["#0ea5e9", "#06b6d4", "#22d3ee"],        // Sky-cyan
+  "small-models": ["#f59e0b", "#f97316", "#fb923c"],          // Amber-orange
+  "cognitive-architecture": ["#ec4899", "#f43f5e", "#fb7185"], // Pink-rose
+  "psyche-interfaces": ["#8b5cf6", "#a855f7", "#c084fc"],     // Violet-purple
+  "ai-experience-design": ["#14b8a6", "#10b981", "#34d399"],  // Teal-emerald
+  "bidirectional-context": ["#3b82f6", "#6366f1", "#818cf8"], // Blue-indigo
+  "neuroscience": ["#ef4444", "#f43f5e", "#fb7185"],          // Red-rose
+  "ai-native-development": ["#22c55e", "#10b981", "#34d399"], // Green-emerald
+  "therapeutics": ["#06b6d4", "#0ea5e9", "#38bdf8"],          // Cyan-sky
+}
+
+const DEFAULT_GRADIENT: [string, string, string] = ["#64748b", "#475569", "#334155"] // Slate
+
 export default ((userOpts?: Partial<Options>) => {
   const ArticleCards: QuartzComponent = ({
     allFiles,
@@ -36,6 +52,22 @@ export default ((userOpts?: Partial<Options>) => {
       return lastPart.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")
     }
 
+    // Get tag key for gradient lookup
+    const getTagKey = (tags: string[] | undefined): string => {
+      if (!tags || tags.length === 0) return ""
+      const tag = tags[0]
+      const parts = tag.split("/")
+      return parts[parts.length - 1]
+    }
+
+    // Generate gradient style based on tag
+    const getGradientStyle = (tags: string[] | undefined): string => {
+      const tagKey = getTagKey(tags)
+      const colors = TAG_GRADIENTS[tagKey] || DEFAULT_GRADIENT
+      // Create a mesh-like gradient with multiple color stops
+      return `linear-gradient(135deg, ${colors[0]}22 0%, ${colors[1]}33 50%, ${colors[2]}22 100%)`
+    }
+
     // Truncate summary
     const truncateSummary = (summary: string | undefined, maxLength: number = 120): string => {
       if (!summary) return ""
@@ -52,15 +84,19 @@ export default ((userOpts?: Partial<Options>) => {
             const tags = page.frontmatter?.tags ?? []
             const summary = page.frontmatter?.summary ?? page.description ?? ""
             const primaryTag = getPrimaryTag(tags)
+            const gradientStyle = getGradientStyle(tags)
+            const tagKey = getTagKey(tags)
+            const accentColor = (TAG_GRADIENTS[tagKey] || DEFAULT_GRADIENT)[0]
 
             return (
               <a
                 href={resolveRelative(fileData.slug!, page.slug!)}
                 class="card-link internal"
               >
-                <article class="article-card">
+                <article class="article-card" style={`background: ${gradientStyle};`}>
+                  <div class="card-accent" style={`background: ${accentColor};`}></div>
                   {primaryTag && (
-                    <span class="card-tag">{primaryTag}</span>
+                    <span class="card-tag" style={`color: ${accentColor};`}>{primaryTag}</span>
                   )}
                   <h3 class="card-title">{title}</h3>
                   <p class="card-summary">{truncateSummary(summary)}</p>
@@ -122,30 +158,40 @@ export default ((userOpts?: Partial<Options>) => {
 }
 
 .article-card {
-  background: var(--light);
+  position: relative;
   border: 1px solid var(--lightgray);
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 1.25rem;
-  transition: all 0.2s ease;
+  padding-top: 1.5rem;
+  transition: all 0.25s ease;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   box-sizing: border-box;
   width: 100%;
+  overflow: hidden;
+}
+
+.card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-radius: 12px 12px 0 0;
 }
 
 .article-card:hover {
-  border-color: var(--secondary);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
+  border-color: transparent;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
 }
 
 .card-tag {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 .card-title {
@@ -157,19 +203,28 @@ export default ((userOpts?: Partial<Options>) => {
 }
 
 .card-summary {
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: var(--gray);
   line-height: 1.5;
   margin: 0;
   flex-grow: 1;
+  opacity: 0.85;
 }
 
 [data-theme="dark"] .article-card {
-  background: var(--darkgray);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 [data-theme="dark"] .article-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .card-title {
+  color: var(--light);
+}
+
+[data-theme="dark"] .card-summary {
+  color: var(--lightgray);
 }
 `
   return ArticleCards
