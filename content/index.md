@@ -2,7 +2,7 @@
 title: Archive Fever
 ---
 
-> *"No desire, no passion, no drive, no compulsion, indeed no repetition compulsion, no 'mal-de' can arise for a person who is not already, in one way or another, en mal d'archive."*
+> *"It is to burn with a passion. It is never to rest, interminably, from searching for the archive right where it slips away. It is to run after the archive, even if there's too much of it, right where something in it anarchives itself. It is to have a compulsive, repetitive, and nostalgic desire for the archive, an irrepressible desire to return to the origin, a homesickness, a nostalgia for the return to the most archaic place of absolute commencement."*
 >
 > — Jacques Derrida, *Archive Fever*
 
