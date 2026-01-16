@@ -12,7 +12,10 @@ const config: QuartzConfig = {
     pageTitleSuffix: " | Archive Fever",
     enableSPA: true,
     enablePopovers: true,
-    analytics: null,
+    analytics: {
+      provider: "goatcounter",
+      websiteId: "archive-fever",
+    },
     locale: "en-US",
     baseUrl: "fcdagdelen.github.io/archive-fever",
     ignorePatterns: ["private", "templates", ".obsidian"],
