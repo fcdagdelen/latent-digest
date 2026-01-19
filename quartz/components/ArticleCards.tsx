@@ -247,7 +247,7 @@ export default ((userOpts?: Partial<Options>) => {
   position: absolute;
   inset: 0;
   border-radius: 12px;
-  opacity: 0.04;
+  opacity: 0.08;
   background-image: repeating-linear-gradient(
     -45deg,
     #7b97aa,
@@ -259,15 +259,15 @@ export default ((userOpts?: Partial<Options>) => {
 }
 
 .building-card:hover::before {
-  opacity: 0.06;
+  opacity: 0.12;
 }
 
 [data-theme="dark"] .building-card::before {
-  opacity: 0.08;
+  opacity: 0.14;
 }
 
 [data-theme="dark"] .building-card:hover::before {
-  opacity: 0.12;
+  opacity: 0.20;
 }
 `
   return ArticleCards
