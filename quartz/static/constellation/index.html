@@ -4,17 +4,111 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Archive Fever · Knowledge Constellation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #06060a;
+      --surface: rgba(15, 15, 25, 0.95);
+      --border: rgba(255,255,255,0.06);
+      --text: #e8e8e8;
+      --text-muted: rgba(255,255,255,0.5);
+      --text-dim: rgba(255,255,255,0.3);
+      
+      /* Domain colors */
+      --lace: #8b5cf6;
+      --pci: #ec4899;
+      --cognitive: #06b6d4;
+      --infra: #22c55e;
+      --philosophy: #f59e0b;
+      --other: #6b7280;
+      
+      /* Concept colors */
+      --emergence: #a855f7;
+      --threshold: #f472b6;
+      --memory: #38bdf8;
+      --reflection: #facc15;
+    }
+    
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
-      background: #0a0a0f;
+      background: var(--bg);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: #e8e8e8;
+      color: var(--text);
       overflow: hidden;
       min-height: 100vh;
     }
     
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 28px;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      pointer-events: none;
+      background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+    }
+    
+    .header-left h1 {
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+    }
+    
+    .header-left p {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+    
+    .header-right {
+      text-align: right;
+    }
+    
+    .mode-toggle {
+      pointer-events: auto;
+      display: flex;
+      gap: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px;
+    }
+    
+    .mode-btn {
+      padding: 6px 12px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .mode-btn.active {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+    }
+    
+    .mode-btn:hover:not(.active) {
+      color: rgba(255,255,255,0.7);
+    }
+    
+    /* Canvas container */
     #canvas-container {
       position: fixed;
       top: 0;
@@ -24,145 +118,110 @@
       z-index: 1;
     }
     
-    .header {
+    /* Legend */
+    .legend {
       position: fixed;
-      top: 24px;
-      left: 32px;
+      bottom: 24px;
+      left: 24px;
       z-index: 10;
       pointer-events: none;
     }
     
-    .header h1 {
-      font-size: 1.5rem;
-      font-weight: 300;
-      letter-spacing: 0.2em;
+    .legend-section {
+      margin-bottom: 16px;
+    }
+    
+    .legend-title {
+      font-size: 0.6rem;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.6);
-      margin-bottom: 4px;
-    }
-    
-    .header p {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.3);
-      letter-spacing: 0.1em;
-    }
-    
-    .legend {
-      position: fixed;
-      bottom: 32px;
-      left: 32px;
-      z-index: 10;
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      margin-bottom: 8px;
     }
     
     .legend-item {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
+      font-size: 0.65rem;
+      color: var(--text-muted);
     }
     
     .legend-dot {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
+      flex-shrink: 0;
     }
     
+    /* Instructions */
+    .instructions {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      text-align: right;
+      z-index: 5;
+      pointer-events: none;
+    }
+    
+    /* Detail panel */
     .detail-panel {
       position: fixed;
-      top: 24px;
-      right: 32px;
-      width: 340px;
-      max-height: calc(100vh - 48px);
-      background: rgba(15, 15, 25, 0.95);
-      border: 1px solid rgba(255,255,255,0.08);
+      top: 80px;
+      right: 24px;
+      width: 380px;
+      max-height: calc(100vh - 104px);
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 24px;
-      z-index: 10;
+      z-index: 50;
       backdrop-filter: blur(20px);
-      transform: translateX(400px);
+      transform: translateX(420px);
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      overflow-y: auto;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
     
     .detail-panel.visible {
       transform: translateX(0);
     }
     
-    .detail-panel h2 {
-      font-size: 1.1rem;
+    .panel-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    
+    .panel-header h2 {
+      font-size: 1rem;
       font-weight: 500;
-      margin-bottom: 8px;
-      color: #fff;
+      padding-right: 32px;
+      line-height: 1.4;
     }
     
-    .detail-panel .category {
-      font-size: 0.65rem;
+    .panel-category {
+      font-size: 0.6rem;
       text-transform: uppercase;
       letter-spacing: 0.15em;
-      color: rgba(255,255,255,0.4);
-      margin-bottom: 16px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    
-    .detail-panel .description {
-      font-size: 0.85rem;
-      line-height: 1.6;
-      color: rgba(255,255,255,0.7);
-      margin-bottom: 20px;
-    }
-    
-    .detail-panel .concepts-title {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: rgba(255,255,255,0.4);
-      margin-bottom: 10px;
-    }
-    
-    .detail-panel .concept-tag {
-      display: inline-block;
-      padding: 4px 10px;
-      margin: 3px;
-      font-size: 0.7rem;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 100px;
-      color: rgba(255,255,255,0.6);
-    }
-    
-    .detail-panel .connections {
-      margin-top: 20px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-    }
-    
-    .detail-panel .connection-item {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.5);
-      padding: 6px 0;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    
-    .detail-panel .connection-item:hover {
-      color: rgba(255,255,255,0.9);
+      margin-top: 6px;
     }
     
     .close-btn {
       position: absolute;
       top: 16px;
       right: 16px;
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       border: none;
-      background: rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.04);
       border-radius: 50%;
-      color: rgba(255,255,255,0.5);
+      color: var(--text-muted);
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -170,22 +229,221 @@
     }
     
     .close-btn:hover {
-      background: rgba(255,255,255,0.1);
-      color: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
     }
     
-    .instructions {
+    .panel-content {
+      padding: 20px 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    
+    .panel-section {
+      margin-bottom: 20px;
+    }
+    
+    .panel-section:last-child {
+      margin-bottom: 0;
+    }
+    
+    .section-title {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+    
+    .panel-description {
+      font-size: 0.82rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.75);
+    }
+    
+    .panel-quote {
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.6);
+      font-style: italic;
+      padding-left: 12px;
+      border-left: 2px solid var(--border);
+    }
+    
+    .concept-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    
+    .concept-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      font-size: 0.65rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .concept-tag:hover {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+    }
+    
+    .connections-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .connection-item {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .connection-item:hover {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+    }
+    
+    .connection-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    
+    /* Concept panel */
+    .concept-panel {
       position: fixed;
-      bottom: 32px;
-      right: 32px;
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.25);
-      text-align: right;
-      z-index: 5;
+      top: 80px;
+      left: 24px;
+      width: 320px;
+      max-height: calc(100vh - 200px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      z-index: 50;
+      backdrop-filter: blur(20px);
+      transform: translateX(-360px);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
     }
     
-    svg {
-      display: block;
+    .concept-panel.visible {
+      transform: translateX(0);
+    }
+    
+    .concept-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .concept-header h3 {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    
+    .concept-content {
+      padding: 16px 20px;
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    
+    .concept-description {
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 16px;
+    }
+    
+    .concept-essays {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .concept-essay-item {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      padding: 8px 10px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .concept-essay-item:hover {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+    }
+    
+    /* Search */
+    .search-container {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 60;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    
+    .search-container.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .search-input {
+      width: 400px;
+      padding: 12px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+    }
+    
+    .search-input::placeholder {
+      color: var(--text-dim);
+    }
+    
+    .search-input:focus {
+      border-color: rgba(255,255,255,0.15);
+    }
+    
+    /* SVG styles */
+    .link {
+      stroke: rgba(255,255,255,0.06);
+      stroke-width: 1;
+      transition: all 0.3s;
+    }
+    
+    .link.highlighted {
+      stroke: rgba(255,255,255,0.35);
+      stroke-width: 1.5;
+    }
+    
+    .link.concept-highlight {
+      stroke-width: 2;
     }
     
     .node {
@@ -197,285 +455,447 @@
     }
     
     .node:hover circle {
-      filter: brightness(1.4);
-    }
-    
-    .link {
-      stroke: rgba(255,255,255,0.08);
-      stroke-width: 1;
-      transition: stroke 0.3s;
-    }
-    
-    .link.highlighted {
-      stroke: rgba(255,255,255,0.4);
-      stroke-width: 2;
+      filter: brightness(1.3);
     }
     
     .node-label {
       font-size: 9px;
-      fill: rgba(255,255,255,0.5);
+      fill: var(--text-muted);
       pointer-events: none;
       text-anchor: middle;
+      font-family: 'Inter', sans-serif;
     }
     
     .glow {
       filter: url(#glow);
     }
     
-    @keyframes pulse {
-      0%, 100% { opacity: 0.6; }
-      50% { opacity: 1; }
+    /* Concept nodes (when in concept mode) */
+    .concept-node {
+      cursor: pointer;
+    }
+    
+    .concept-node text {
+      font-size: 11px;
+      fill: var(--text);
+      font-weight: 500;
+      pointer-events: none;
+    }
+    
+    /* Responsive */
+    @media (max-width: 900px) {
+      .detail-panel {
+        width: calc(100vw - 48px);
+        right: 24px;
+      }
+      
+      .concept-panel {
+        width: calc(100vw - 48px);
+        left: 24px;
+      }
+      
+      .legend {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1>Archive Fever</h1>
-    <p>22 essays · Knowledge Constellation</p>
+    <div class="header-left">
+      <h1>Archive Fever</h1>
+      <p>22 essays · emergent ontology · threshold structures</p>
+    </div>
+    <div class="header-right">
+      <div class="mode-toggle">
+        <button class="mode-btn active" data-mode="essays">Essays</button>
+        <button class="mode-btn" data-mode="concepts">Concepts</button>
+      </div>
+    </div>
   </div>
   
   <div class="legend">
-    <div class="legend-item">
-      <div class="legend-dot" style="background: #7c3aed;"></div>
-      <span>LACE · Knowledge Management</span>
-    </div>
-    <div class="legend-item">
-      <div class="legend-dot" style="background: #ec4899;"></div>
-      <span>PCI · Psyche-Computer Interface</span>
-    </div>
-    <div class="legend-item">
-      <div class="legend-dot" style="background: #06b6d4;"></div>
-      <span>Cognitive Architecture</span>
-    </div>
-    <div class="legend-item">
-      <div class="legend-dot" style="background: #22c55e;"></div>
-      <span>Infrastructure & Design</span>
-    </div>
-    <div class="legend-item">
-      <div class="legend-dot" style="background: #f59e0b;"></div>
-      <span>Philosophy & Method</span>
-    </div>
-    <div class="legend-item">
-      <div class="legend-dot" style="background: #6b7280;"></div>
-      <span>Other</span>
+    <div class="legend-section">
+      <div class="legend-title">Domains</div>
+      <div class="legend-item"><div class="legend-dot" style="background: var(--lace);"></div>LACE · Knowledge Management</div>
+      <div class="legend-item"><div class="legend-dot" style="background: var(--pci);"></div>PCI · Psyche-Computer Interface</div>
+      <div class="legend-item"><div class="legend-dot" style="background: var(--cognitive);"></div>Cognitive Architecture</div>
+      <div class="legend-item"><div class="legend-dot" style="background: var(--infra);"></div>Infrastructure & Design</div>
+      <div class="legend-item"><div class="legend-dot" style="background: var(--philosophy);"></div>Philosophy & Method</div>
     </div>
   </div>
   
   <div class="instructions">
-    drag to explore · click nodes for details · scroll to zoom
+    drag to explore · click for details · scroll to zoom<br>
+    press / to search
   </div>
   
   <div id="detail-panel" class="detail-panel">
-    <button class="close-btn" onclick="closePanel()">×</button>
-    <h2 id="panel-title"></h2>
-    <div id="panel-category" class="category"></div>
-    <div id="panel-description" class="description"></div>
-    <div class="concepts-title">Key Concepts</div>
-    <div id="panel-concepts"></div>
-    <div class="connections">
-      <div class="concepts-title">Connected Essays</div>
-      <div id="panel-connections"></div>
+    <div class="panel-header">
+      <h2 id="panel-title"></h2>
+      <div id="panel-category" class="panel-category"></div>
+      <button class="close-btn" onclick="closePanel()">×</button>
     </div>
+    <div class="panel-content">
+      <div class="panel-section">
+        <div class="section-title">Core Insight</div>
+        <div id="panel-description" class="panel-description"></div>
+      </div>
+      <div class="panel-section">
+        <div class="section-title">Key Quote</div>
+        <div id="panel-quote" class="panel-quote"></div>
+      </div>
+      <div class="panel-section">
+        <div class="section-title">Concepts</div>
+        <div id="panel-concepts" class="concept-tags"></div>
+      </div>
+      <div class="panel-section">
+        <div class="section-title">Connected Essays</div>
+        <div id="panel-connections" class="connections-list"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="concept-panel" class="concept-panel">
+    <div class="concept-header">
+      <h3 id="concept-title"></h3>
+      <button class="close-btn" onclick="closeConceptPanel()">×</button>
+    </div>
+    <div class="concept-content">
+      <div id="concept-description" class="concept-description"></div>
+      <div class="section-title" style="margin-bottom: 8px;">Essays exploring this concept</div>
+      <div id="concept-essays" class="concept-essays"></div>
+    </div>
+  </div>
+  
+  <div class="search-container" id="search-container">
+    <input type="text" class="search-input" id="search-input" placeholder="Search essays and concepts...">
   </div>
   
   <div id="canvas-container"></div>
   
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script>
-    // Essay data with categories and concepts
+    // ============================================
+    // DEEP ESSAY DATA
+    // ============================================
+    
     const essays = [
       {
-        id: "advanced-rag-architectures",
+        id: "tristero",
+        title: "Tristero: Event-Sourced Knowledge",
+        category: "LACE",
+        description: "Knowledge systems should treat organizational structure as emergent, provisional, and learnable. Event sourcing provides the infrastructure—rebuild projections when understanding evolves without losing underlying observations.",
+        quote: "The paradox at the heart of knowledge systems: you need structure to make information useful, but the structure you need keeps changing as you learn.",
+        concepts: ["emergent ontology", "event sourcing", "reflection", "threshold structures", "bitter lesson"],
+        connections: ["bidirectional-context", "advanced-rag", "infrastructure-tradeoffs"]
+      },
+      {
+        id: "bidirectional-context",
+        title: "Bidirectional Context",
+        category: "Philosophy",
+        description: "Context as a membrane of mutual becoming—both human and AI transformed through encounter. Simondon's insight: individuals consist in relations, and relation has the status of being.",
+        quote: "The context window isn't where thinking happens; it's part of what thinking is.",
+        concepts: ["mutual transformation", "Simondon", "extended mind", "threshold structures", "emergence"],
+        connections: ["tristero", "visible-cognition", "psyche-computer-interface"]
+      },
+      {
+        id: "visible-cognition",
+        title: "Visible Cognition",
+        category: "Philosophy",
+        description: "The emerging aesthetic of reasoning-forward interfaces: literary traditions that foreground thought's movement, philosophical forms that perform inquiry, computational systems where the trace of reasoning becomes the primary artifact.",
+        quote: "Text that appears word-by-word activates fundamentally different cognitive and affective registers than static text—creating presence, anticipation, and the sensation of witnessing thought unfold.",
+        concepts: ["process", "streaming", "phenomenology", "closure", "Warburg"],
+        connections: ["bidirectional-context", "reasoning-traces-psyche", "ontological-composition"]
+      },
+      {
+        id: "ontological-composition",
+        title: "Ontological Composition",
+        category: "Philosophy",
+        description: "Using organizational structures discovered in one domain to illuminate structure in another. Warburg's Mnemosyne Atlas as model: meaning emerges from the spaces between, not individual images.",
+        quote: "The most promising path forward would combine schema abstraction mechanisms from analogical reasoning with ontology design patterns as transferable structural primitives.",
+        concepts: ["Warburg", "transfer", "pattern", "anarchive", "schema"],
+        connections: ["visible-cognition", "tristero", "psyche-polis"]
+      },
+      {
+        id: "psyche-computer-interface",
+        title: "Psyche-Computer Interface",
+        category: "PCI",
+        description: "Systems that treat words and behaviors as reflection of inner world, using them to adapt and respond insightfully. The mirror that listens—language as window to the unconscious.",
+        quote: "A PCI is less about machines reading our minds, and more about giving us new mirrors to read our own minds more clearly.",
+        concepts: ["psyche", "reflection", "language", "unconscious", "mutual transformation"],
+        connections: ["bidirectional-context", "psyche-polis", "reasoning-traces-psyche"]
+      },
+      {
+        id: "psyche-polis",
+        title: "Psyche-Polis",
+        category: "PCI",
+        description: "Transforming journal entries into procedural city formations. Freud's impossible Rome—psychic strata coexisting simultaneously—combined with ECS architecture and structured LLM interpretation.",
+        quote: "The city must mirror the soul's organization, not merely illustrate its contents.",
+        concepts: ["city", "memory palace", "emergence", "ECS", "Freud"],
+        connections: ["psyche-computer-interface", "artificial-dream-systems", "game-engines"]
+      },
+      {
+        id: "reasoning-traces-psyche",
+        title: "Reasoning Traces & Psyche",
+        category: "PCI",
+        description: "Using chain-of-thought reasoning traces as psychological material. Analyst agents interpret traces to extract implicit user models, patterns, and affective inferences.",
+        quote: "Traces represent something like an 'unconscious' layer—cognition that shapes behavior without direct expression.",
+        concepts: ["reasoning traces", "analyst", "psyche", "implicit", "emergence"],
+        connections: ["psyche-computer-interface", "visible-cognition", "triple-network-model"]
+      },
+      {
+        id: "small-model-swarm",
+        title: "Small Model Swarm",
+        category: "PCI",
+        description: "Production stack for psychographic graph modeling using LangGraph + Graphiti + specialized models. Orchestrated intelligence through coordinated specialists.",
+        quote: "Specialized small models can outperform generalist frontier models on structured extraction tasks.",
+        concepts: ["swarm", "orchestration", "specialization", "graph", "production"],
+        connections: ["psyche-computer-interface", "advanced-rag", "infrastructure-tradeoffs"]
+      },
+      {
+        id: "triple-network-model",
+        title: "Triple Network Model",
+        category: "Cognitive",
+        description: "Menon's DMN/FPN/SN framework: Default Mode for self-reference, Frontoparietal for task execution, Salience Network as the critical switching mechanism between them.",
+        quote: "The anterior insula acts as a 'causal hub,' generating control signals that simultaneously activate the FPN while suppressing the DMN.",
+        concepts: ["networks", "attention", "switching", "DMN", "salience"],
+        connections: ["reasoning-traces-psyche", "artificial-dream-systems", "psyche-computer-interface"]
+      },
+      {
+        id: "artificial-dream-systems",
+        title: "Artificial Dream Systems",
+        category: "Cognitive",
+        description: "AI dreaming for consolidation, creativity, and continual learning. Mechanisms that recombine and generate experiences offline to improve learning and cognition.",
+        quote: "Creative dreaming can bootstrap abstraction. The dreams serve as a sandbox for exploring concept space—making surprising connections that weren't explicit in the input data.",
+        concepts: ["dreams", "consolidation", "creativity", "memory", "emergence"],
+        connections: ["psyche-polis", "triple-network-model", "semantic-retrieval-memory"]
+      },
+      {
+        id: "memory-architectures",
+        title: "Memory Architectures",
+        category: "Cognitive",
+        description: "Comparing ChatGPT vs Claude vs Gemini memory implementations. How different systems approach persistence, recall, and user modeling.",
+        quote: "Memory systems determine not just what is remembered, but how the system relates to its user over time.",
+        concepts: ["memory", "persistence", "user modeling", "architecture", "comparison"],
+        connections: ["bidirectional-context", "semantic-retrieval-memory", "advanced-rag"]
+      },
+      {
+        id: "advanced-rag",
         title: "Advanced RAG Architectures",
         category: "LACE",
-        description: "Hypergraph memory, Graph-O1, and MegaRAG patterns for LACE's 4-layer emergent ontology. Explores how retrieval-augmented generation can support evolving knowledge structures.",
-        concepts: ["hypergraph", "memory", "RAG", "emergent ontology", "knowledge layers"]
+        description: "Hypergraph memory, Graph-O1, MegaRAG patterns for emergent ontology. Key innovations: hyperedge merging for pattern crystallization, multi-criteria RL rewards for relational density.",
+        quote: "Typed relations become hyperedge attributes. Contradiction detection leverages constraint satisfaction over hyperedges.",
+        concepts: ["RAG", "hypergraph", "crystallization", "emergence", "knowledge graph"],
+        connections: ["tristero", "dynamic-knowledge-graphs", "semantic-retrieval-memory"]
       },
       {
         id: "dynamic-knowledge-graphs",
         title: "Dynamic Knowledge Graphs",
         category: "LACE",
         description: "Living knowledge bases with small model + frontier LLM orchestration. Graphs that evolve through use rather than upfront design.",
-        concepts: ["knowledge graphs", "orchestration", "living systems", "small models", "emergence"]
+        quote: "Categories, relationships, hierarchies should arise from use patterns rather than upfront design.",
+        concepts: ["knowledge graph", "emergence", "orchestration", "living systems", "evolution"],
+        connections: ["tristero", "advanced-rag", "llm-kg-benchmarks"]
       },
       {
         id: "semantic-retrieval-memory",
         title: "Semantic Retrieval & Memory",
         category: "LACE",
-        description: "Dynamic threshold calibration, forgetting mechanisms, and context management. How systems can learn what to remember and what to let go.",
-        concepts: ["memory", "forgetting", "thresholds", "context", "retrieval"]
+        description: "Dynamic threshold calibration, forgetting mechanisms, context management. How systems learn what to remember and what to let go.",
+        quote: "Forgetting is not failure—it's curation. Systems must learn what matters enough to preserve.",
+        concepts: ["memory", "forgetting", "retrieval", "thresholds", "context"],
+        connections: ["advanced-rag", "artificial-dream-systems", "memory-architectures"]
       },
       {
-        id: "llm-kg-benchmarks-production",
+        id: "llm-kg-benchmarks",
         title: "LLM-KG Benchmarks",
         category: "LACE",
         description: "Fine-tuned 7B models outperform GPT-4 on knowledge graph completion. Evidence that specialized small models beat generalists on structured tasks.",
-        concepts: ["benchmarks", "fine-tuning", "small models", "knowledge graphs", "specialization"]
+        quote: "The bitter lesson meets specialization: sometimes craft beats scale when the task is well-defined.",
+        concepts: ["benchmarks", "specialization", "knowledge graph", "fine-tuning", "bitter lesson"],
+        connections: ["dynamic-knowledge-graphs", "small-model-swarm", "infrastructure-tradeoffs"]
       },
       {
-        id: "tristero",
-        title: "Tristero",
-        category: "LACE",
-        description: "Event-sourced knowledge systems where ontology emerges through governed reflection. Propose → Critique → Execute cycle for evolution.",
-        concepts: ["event sourcing", "emergence", "reflection", "governance", "ontology"]
-      },
-      {
-        id: "psyche-computer-interface",
-        title: "Psyche-Computer Interface",
-        category: "PCI",
-        description: "The Mirror That Listens — language as window to the unconscious. Using computational methods to model psyche without psychoanalytic frameworks.",
-        concepts: ["psyche", "language", "interface", "mirror", "consciousness"]
-      },
-      {
-        id: "reasoning-traces-psyche",
-        title: "Reasoning Traces & Psyche",
-        category: "PCI",
-        description: "Using AI reasoning traces as raw material for psyche modeling. The process of thinking becomes data for understanding mind.",
-        concepts: ["reasoning traces", "psyche", "process", "modeling", "emergence"]
-      },
-      {
-        id: "psyche-polis",
-        title: "Psyche-Polis",
-        category: "PCI",
-        description: "Procedural city generation from journal entries — Freud's Rome as metaphor. Personal history becomes navigable architecture.",
-        concepts: ["city", "journal", "procedural", "architecture", "memory"]
-      },
-      {
-        id: "small-model-swarm",
-        title: "Small Model Swarm",
-        category: "PCI",
-        description: "Production stack for psychographic graph modeling using LangGraph + Graphiti + specialized models. Orchestrated intelligence.",
-        concepts: ["swarm", "small models", "orchestration", "graphs", "production"]
-      },
-      {
-        id: "triple-network-model",
-        title: "Triple Network Model",
-        category: "Cognitive",
-        description: "Menon's DMN/FPN/SN framework — default mode, frontoparietal, and salience networks. How attention and introspection interplay.",
-        concepts: ["networks", "attention", "DMN", "salience", "cognition"]
-      },
-      {
-        id: "artificial-dream-systems",
-        title: "Artificial Dream Systems",
-        category: "Cognitive",
-        description: "AI dreaming for consolidation, creativity, and continual learning. Sleep as computational strategy.",
-        concepts: ["dreams", "creativity", "consolidation", "continual learning", "sleep"]
-      },
-      {
-        id: "memory-architectures-frontier-ai",
-        title: "Memory Architectures",
-        category: "Cognitive",
-        description: "Comparing ChatGPT vs Claude vs Gemini memory implementations. How different systems approach persistence and recall.",
-        concepts: ["memory", "comparison", "persistence", "recall", "architecture"]
+        id: "infrastructure-tradeoffs",
+        title: "Infrastructure Tradeoffs",
+        category: "Infrastructure",
+        description: "The Bitter Lesson applied to agents: light scaffolding beats heavy validation. Build meta-methods, not complexity. Quantitative metrics cannot capture ontological quality.",
+        quote: "Build in only the meta-methods that can find and capture complexity, not the complexity itself.",
+        concepts: ["bitter lesson", "scaffolding", "validation", "meta-methods", "emergence"],
+        connections: ["tristero", "deep-research-agents", "vibe-coding-infrastructure"]
       },
       {
         id: "vibe-coding-infrastructure",
         title: "Vibe Coding Infrastructure",
         category: "Infrastructure",
         description: "Complete stack: Supabase + Vercel + Inngest + shadcn/ui. The aesthetic of modern development infrastructure.",
-        concepts: ["infrastructure", "stack", "Supabase", "aesthetic", "tooling"]
-      },
-      {
-        id: "infrastructure-tradeoffs",
-        title: "Infrastructure Tradeoffs",
-        category: "Infrastructure",
-        description: "The Bitter Lesson applied to agents: light scaffolding beats heavy validation. Build meta-methods, not complexity.",
-        concepts: ["bitter lesson", "scaffolding", "validation", "meta-methods", "simplicity"]
+        quote: "Infrastructure should be invisible until you need it, then obvious when you do.",
+        concepts: ["infrastructure", "stack", "aesthetic", "tooling", "modern"],
+        connections: ["infrastructure-tradeoffs", "deep-research-agents", "generative-ai-design"]
       },
       {
         id: "deep-research-agents",
         title: "Deep Research Agents",
         category: "Infrastructure",
         description: "Technical guide for LangGraph, Tavily, and plan-execute patterns. Building agents that can actually research.",
-        concepts: ["agents", "research", "LangGraph", "planning", "execution"]
+        quote: "Research is not retrieval—it's the iterative process of refining questions through what you discover.",
+        concepts: ["agents", "research", "planning", "execution", "iteration"],
+        connections: ["infrastructure-tradeoffs", "vibe-coding-infrastructure", "small-model-swarm"]
       },
       {
         id: "generative-ai-design",
         title: "Generative AI Design",
         category: "Infrastructure",
         description: "UX patterns for AI: onboarding, memory, persona persistence, failure recovery. The human side of AI systems.",
-        concepts: ["design", "UX", "persona", "onboarding", "recovery"]
-      },
-      {
-        id: "bidirectional-context",
-        title: "Bidirectional Context",
-        category: "Philosophy",
-        description: "Context as mutual transformation — both human and AI changed through encounter. Simondon, enactivism, CRDTs for shared becoming.",
-        concepts: ["context", "transformation", "Simondon", "enactivism", "CRDTs"]
-      },
-      {
-        id: "visible-cognition",
-        title: "Visible Cognition",
-        category: "Philosophy",
-        description: "Process as artifact — the phenomenology of streaming text. Thought made visible in real-time.",
-        concepts: ["process", "visibility", "streaming", "phenomenology", "artifact"]
-      },
-      {
-        id: "ontological-composition",
-        title: "Ontological Composition",
-        category: "Philosophy",
-        description: "Cross-domain structural transfer using Warburg and anarchive methods. How patterns move between fields.",
-        concepts: ["ontology", "composition", "Warburg", "transfer", "anarchive"]
+        quote: "The best AI interface is a threshold—a liminal space where transformation becomes possible.",
+        concepts: ["design", "UX", "persona", "threshold structures", "failure"],
+        connections: ["bidirectional-context", "vibe-coding-infrastructure", "psyche-computer-interface"]
       },
       {
         id: "alternative-data-signals",
         title: "Alternative Data Signals",
         category: "Philosophy",
-        description: "OSINT and proxy signals for sense-making. Finding truth in indirect evidence.",
-        concepts: ["OSINT", "signals", "sense-making", "proxy", "evidence"]
+        description: "OSINT and proxy signals for sense-making. Finding truth in indirect evidence when direct observation is impossible.",
+        quote: "The most valuable signals are often the ones no one is optimizing for.",
+        concepts: ["OSINT", "signals", "sense-making", "proxy", "evidence"],
+        connections: ["ontological-composition", "dynamic-knowledge-graphs", "reasoning-traces-psyche"]
       },
       {
         id: "notebooklm-analysis",
         title: "NotebookLM Analysis",
         category: "Other",
         description: "Multi-source synthesis and RAG pipeline analysis. Understanding Google's approach to document intelligence.",
-        concepts: ["NotebookLM", "synthesis", "RAG", "analysis", "documents"]
+        quote: "Synthesis is not aggregation—it's the creation of novel understanding from multiple sources.",
+        concepts: ["synthesis", "RAG", "documents", "analysis", "Google"],
+        connections: ["advanced-rag", "memory-architectures", "deep-research-agents"]
       },
       {
-        id: "game-engines-simulation",
+        id: "game-engines",
         title: "Game Engines & Simulation",
         category: "Other",
-        description: "ECS architecture and engines as world models. Simulation as epistemology.",
-        concepts: ["games", "ECS", "simulation", "world models", "architecture"]
+        description: "ECS architecture and engines as world models. Simulation as epistemology—understanding through building.",
+        quote: "The engine is not a tool for making games—it's a way of thinking about worlds.",
+        concepts: ["ECS", "simulation", "world models", "games", "architecture"],
+        connections: ["psyche-polis", "artificial-dream-systems", "infrastructure-tradeoffs"]
       }
     ];
     
-    // Category colors
+    // ============================================
+    // KEY CONCEPTS (for concept mode)
+    // ============================================
+    
+    const keyConcepts = [
+      {
+        id: "emergent-ontology",
+        name: "Emergent Ontology",
+        description: "Categories, types, and relationships should arise from use patterns rather than upfront design. Structure crystallizes through observation, not imposition.",
+        color: "var(--emergence)",
+        essays: ["tristero", "dynamic-knowledge-graphs", "advanced-rag", "infrastructure-tradeoffs"]
+      },
+      {
+        id: "threshold-structures",
+        name: "Threshold Structures",
+        description: "Systems that enable transformation without destruction. Liminal spaces where change becomes possible while preserving what matters.",
+        color: "var(--threshold)",
+        essays: ["tristero", "bidirectional-context", "generative-ai-design", "psyche-polis"]
+      },
+      {
+        id: "mutual-transformation",
+        name: "Mutual Transformation",
+        description: "Both parties changed through encounter. Context as membrane of becoming, not container. Simondon's relational ontology.",
+        color: "var(--emergence)",
+        essays: ["bidirectional-context", "psyche-computer-interface", "visible-cognition"]
+      },
+      {
+        id: "bitter-lesson",
+        name: "The Bitter Lesson",
+        description: "General methods leveraging computation beat hand-crafted knowledge. Build meta-methods that can find complexity, not the complexity itself.",
+        color: "var(--infra)",
+        essays: ["infrastructure-tradeoffs", "tristero", "llm-kg-benchmarks"]
+      },
+      {
+        id: "reflection-process",
+        name: "Reflection as Process",
+        description: "Governed ontology evolution through propose → critique → execute. The system that observes itself and learns from the observation.",
+        color: "var(--reflection)",
+        essays: ["tristero", "reasoning-traces-psyche", "psyche-computer-interface"]
+      },
+      {
+        id: "memory-consolidation",
+        name: "Memory & Consolidation",
+        description: "What to remember, what to forget, how to transform. Dreams, replay, and the architecture of persistence.",
+        color: "var(--memory)",
+        essays: ["artificial-dream-systems", "semantic-retrieval-memory", "memory-architectures", "psyche-polis"]
+      },
+      {
+        id: "visible-process",
+        name: "Visible Process",
+        description: "The trace of reasoning as primary artifact. Streaming text phenomenology. Process made observable and meaningful.",
+        color: "var(--philosophy)",
+        essays: ["visible-cognition", "reasoning-traces-psyche", "bidirectional-context"]
+      },
+      {
+        id: "warburg-method",
+        name: "Warburgian Method",
+        description: "Meaning through juxtaposition. The iconology of intervals. Constellation thinking over hierarchical taxonomy.",
+        color: "var(--philosophy)",
+        essays: ["ontological-composition", "visible-cognition", "psyche-polis"]
+      }
+    ];
+    
+    // ============================================
+    // CATEGORY COLORS
+    // ============================================
+    
     const categoryColors = {
-      "LACE": "#7c3aed",
-      "PCI": "#ec4899",
-      "Cognitive": "#06b6d4",
-      "Infrastructure": "#22c55e",
-      "Philosophy": "#f59e0b",
-      "Other": "#6b7280"
+      "LACE": "var(--lace)",
+      "PCI": "var(--pci)",
+      "Cognitive": "var(--cognitive)",
+      "Infrastructure": "var(--infra)",
+      "Philosophy": "var(--philosophy)",
+      "Other": "var(--other)"
     };
     
-    // Build connection graph based on shared concepts
+    // ============================================
+    // BUILD LINKS FROM CONNECTIONS
+    // ============================================
+    
     function buildLinks(essays) {
       const links = [];
-      for (let i = 0; i < essays.length; i++) {
-        for (let j = i + 1; j < essays.length; j++) {
-          const shared = essays[i].concepts.filter(c => 
-            essays[j].concepts.some(c2 => 
-              c.toLowerCase().includes(c2.toLowerCase()) || 
-              c2.toLowerCase().includes(c.toLowerCase())
-            )
-          );
-          if (shared.length > 0 || essays[i].category === essays[j].category) {
-            links.push({
-              source: essays[i].id,
-              target: essays[j].id,
-              strength: shared.length + (essays[i].category === essays[j].category ? 0.5 : 0)
-            });
+      const seen = new Set();
+      
+      essays.forEach(essay => {
+        essay.connections.forEach(targetId => {
+          const key = [essay.id, targetId].sort().join('--');
+          if (!seen.has(key)) {
+            seen.add(key);
+            const target = essays.find(e => e.id === targetId);
+            if (target) {
+              // Find shared concepts
+              const sharedConcepts = essay.concepts.filter(c => 
+                target.concepts.includes(c)
+              );
+              links.push({
+                source: essay.id,
+                target: targetId,
+                strength: 0.5 + sharedConcepts.length * 0.2,
+                sharedConcepts
+              });
+            }
           }
-        }
-      }
+        });
+      });
+      
       return links;
     }
     
     const links = buildLinks(essays);
     
-    // Setup SVG
+    // ============================================
+    // SVG SETUP
+    // ============================================
+    
     const container = document.getElementById('canvas-container');
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -485,35 +905,32 @@
       .attr("width", width)
       .attr("height", height);
     
-    // Add glow filter
+    // Glow filter
     const defs = svg.append("defs");
-    
     const filter = defs.append("filter")
       .attr("id", "glow")
-      .attr("x", "-50%")
-      .attr("y", "-50%")
-      .attr("width", "200%")
-      .attr("height", "200%");
+      .attr("x", "-100%").attr("y", "-100%")
+      .attr("width", "300%").attr("height", "300%");
     
     filter.append("feGaussianBlur")
-      .attr("stdDeviation", "4")
+      .attr("stdDeviation", "3")
       .attr("result", "coloredBlur");
     
     const feMerge = filter.append("feMerge");
     feMerge.append("feMergeNode").attr("in", "coloredBlur");
     feMerge.append("feMergeNode").attr("in", "SourceGraphic");
     
-    // Add starfield background
+    // Starfield
     const starfield = svg.append("g").attr("class", "starfield");
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 150; i++) {
       starfield.append("circle")
         .attr("cx", Math.random() * width)
         .attr("cy", Math.random() * height)
-        .attr("r", Math.random() * 1.2)
-        .attr("fill", `rgba(255,255,255,${Math.random() * 0.3 + 0.1})`);
+        .attr("r", Math.random() * 1)
+        .attr("fill", `rgba(255,255,255,${Math.random() * 0.2 + 0.05})`);
     }
     
-    // Zoom behavior
+    // Main group with zoom
     const g = svg.append("g");
     
     const zoom = d3.zoom()
@@ -524,22 +941,25 @@
     
     svg.call(zoom);
     
-    // Create force simulation
-    const simulation = d3.forceSimulation(essays)
-      .force("link", d3.forceLink(links).id(d => d.id).distance(120).strength(d => d.strength * 0.1))
-      .force("charge", d3.forceManyBody().strength(-300))
-      .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collision", d3.forceCollide().radius(50));
+    // ============================================
+    // FORCE SIMULATION
+    // ============================================
     
-    // Draw links
+    const simulation = d3.forceSimulation(essays)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(140).strength(d => d.strength * 0.15))
+      .force("charge", d3.forceManyBody().strength(-400))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collision", d3.forceCollide().radius(55));
+    
+    // Links
     const link = g.append("g")
       .selectAll("line")
       .data(links)
       .join("line")
       .attr("class", "link")
-      .attr("stroke-opacity", d => Math.min(d.strength * 0.15, 0.4));
+      .attr("stroke-opacity", d => Math.min(d.strength * 0.4, 0.5));
     
-    // Draw nodes
+    // Nodes
     const node = g.append("g")
       .selectAll("g")
       .data(essays)
@@ -550,62 +970,116 @@
         .on("drag", dragged)
         .on("end", dragended));
     
-    // Node circles with glow
+    // Outer glow
     node.append("circle")
-      .attr("r", d => 12 + Math.random() * 4)
+      .attr("r", 16)
       .attr("fill", d => categoryColors[d.category])
-      .attr("class", "glow")
+      .attr("opacity", 0.15)
+      .attr("class", "glow");
+    
+    // Main circle
+    node.append("circle")
+      .attr("r", 10)
+      .attr("fill", d => categoryColors[d.category])
       .attr("opacity", 0.9);
     
-    // Inner bright core
+    // Inner core
     node.append("circle")
-      .attr("r", 4)
+      .attr("r", 3)
       .attr("fill", "#fff")
-      .attr("opacity", 0.8);
+      .attr("opacity", 0.7);
     
     // Labels
     node.append("text")
       .attr("class", "node-label")
-      .attr("dy", 28)
-      .text(d => d.title.length > 20 ? d.title.slice(0, 18) + "…" : d.title);
+      .attr("dy", 26)
+      .text(d => d.title.length > 22 ? d.title.slice(0, 20) + "…" : d.title);
     
-    // Interactions
+    // ============================================
+    // INTERACTIONS
+    // ============================================
+    
+    let selectedEssay = null;
+    let selectedConcept = null;
+    
     node.on("click", (event, d) => {
       event.stopPropagation();
+      selectedEssay = d;
       showPanel(d);
       highlightConnections(d);
     });
     
     node.on("mouseenter", (event, d) => {
-      highlightConnections(d);
+      if (!selectedEssay) {
+        highlightConnections(d);
+      }
     });
     
     node.on("mouseleave", () => {
-      if (!document.getElementById('detail-panel').classList.contains('visible')) {
+      if (!selectedEssay) {
         resetHighlights();
       }
     });
     
     svg.on("click", () => {
       closePanel();
+      closeConceptPanel();
+      selectedEssay = null;
+      selectedConcept = null;
       resetHighlights();
     });
     
     function highlightConnections(d) {
       const connected = new Set();
       links.forEach(l => {
-        if (l.source.id === d.id) connected.add(l.target.id);
-        if (l.target.id === d.id) connected.add(l.source.id);
+        const sourceId = typeof l.source === 'object' ? l.source.id : l.source;
+        const targetId = typeof l.target === 'object' ? l.target.id : l.target;
+        if (sourceId === d.id) connected.add(targetId);
+        if (targetId === d.id) connected.add(sourceId);
       });
       
-      link.classed("highlighted", l => l.source.id === d.id || l.target.id === d.id);
-      node.style("opacity", n => n.id === d.id || connected.has(n.id) ? 1 : 0.3);
+      link.classed("highlighted", l => {
+        const sourceId = typeof l.source === 'object' ? l.source.id : l.source;
+        const targetId = typeof l.target === 'object' ? l.target.id : l.target;
+        return sourceId === d.id || targetId === d.id;
+      });
+      
+      node.style("opacity", n => n.id === d.id || connected.has(n.id) ? 1 : 0.25);
+    }
+    
+    function highlightConcept(conceptId) {
+      const concept = keyConcepts.find(c => c.id === conceptId);
+      if (!concept) return;
+      
+      const essaySet = new Set(concept.essays);
+      
+      node.style("opacity", n => essaySet.has(n.id) ? 1 : 0.15);
+      
+      link.classed("highlighted", l => {
+        const sourceId = typeof l.source === 'object' ? l.source.id : l.source;
+        const targetId = typeof l.target === 'object' ? l.target.id : l.target;
+        return essaySet.has(sourceId) && essaySet.has(targetId);
+      });
+      
+      link.style("stroke", l => {
+        const sourceId = typeof l.source === 'object' ? l.source.id : l.source;
+        const targetId = typeof l.target === 'object' ? l.target.id : l.target;
+        if (essaySet.has(sourceId) && essaySet.has(targetId)) {
+          return concept.color;
+        }
+        return null;
+      });
     }
     
     function resetHighlights() {
       link.classed("highlighted", false);
+      link.style("stroke", null);
       node.style("opacity", 1);
     }
+    
+    // ============================================
+    // PANELS
+    // ============================================
     
     function showPanel(d) {
       const panel = document.getElementById('detail-panel');
@@ -613,47 +1087,83 @@
       document.getElementById('panel-category').textContent = d.category;
       document.getElementById('panel-category').style.color = categoryColors[d.category];
       document.getElementById('panel-description').textContent = d.description;
+      document.getElementById('panel-quote').textContent = d.quote;
       
+      // Concepts
       const conceptsDiv = document.getElementById('panel-concepts');
-      conceptsDiv.innerHTML = d.concepts.map(c => 
-        `<span class="concept-tag">${c}</span>`
-      ).join('');
+      conceptsDiv.innerHTML = d.concepts.map(c => {
+        const keyConcept = keyConcepts.find(kc => kc.essays.includes(d.id) && kc.name.toLowerCase().includes(c.toLowerCase()));
+        const color = keyConcept ? keyConcept.color : 'var(--text-muted)';
+        return `<span class="concept-tag" onclick="showConceptFromTag('${c}')" style="border-color: ${color}40;">${c}</span>`;
+      }).join('');
       
-      // Find connections
-      const connections = [];
-      links.forEach(l => {
-        if (l.source.id === d.id) {
-          const target = essays.find(e => e.id === l.target.id);
-          if (target) connections.push(target);
-        }
-        if (l.target.id === d.id) {
-          const source = essays.find(e => e.id === l.source.id);
-          if (source) connections.push(source);
-        }
-      });
-      
+      // Connections
       const connectionsDiv = document.getElementById('panel-connections');
-      connectionsDiv.innerHTML = connections.slice(0, 6).map(c => 
-        `<div class="connection-item" onclick="focusNode('${c.id}')">${c.title}</div>`
-      ).join('');
+      const connectedEssays = d.connections
+        .map(id => essays.find(e => e.id === id))
+        .filter(Boolean);
+      
+      connectionsDiv.innerHTML = connectedEssays.map(e => `
+        <div class="connection-item" onclick="focusNode('${e.id}')">
+          <div class="connection-dot" style="background: ${categoryColors[e.category]};"></div>
+          ${e.title}
+        </div>
+      `).join('');
       
       panel.classList.add('visible');
+      closeConceptPanel();
     }
+    
+    function showConceptPanel(concept) {
+      const panel = document.getElementById('concept-panel');
+      document.getElementById('concept-title').textContent = concept.name;
+      document.getElementById('concept-title').style.color = concept.color;
+      document.getElementById('concept-description').textContent = concept.description;
+      
+      const essaysDiv = document.getElementById('concept-essays');
+      essaysDiv.innerHTML = concept.essays.map(id => {
+        const essay = essays.find(e => e.id === id);
+        if (!essay) return '';
+        return `<div class="concept-essay-item" onclick="focusNode('${id}')">${essay.title}</div>`;
+      }).join('');
+      
+      panel.classList.add('visible');
+      highlightConcept(concept.id);
+      selectedConcept = concept;
+    }
+    
+    window.showConceptFromTag = function(tag) {
+      const concept = keyConcepts.find(c => 
+        c.name.toLowerCase().includes(tag.toLowerCase()) ||
+        tag.toLowerCase().includes(c.name.toLowerCase().split(' ')[0])
+      );
+      if (concept) {
+        showConceptPanel(concept);
+      }
+    };
     
     window.closePanel = function() {
       document.getElementById('detail-panel').classList.remove('visible');
-      resetHighlights();
-    }
+      selectedEssay = null;
+      if (!selectedConcept) resetHighlights();
+    };
+    
+    window.closeConceptPanel = function() {
+      document.getElementById('concept-panel').classList.remove('visible');
+      selectedConcept = null;
+      if (!selectedEssay) resetHighlights();
+    };
     
     window.focusNode = function(id) {
       const d = essays.find(e => e.id === id);
       if (d) {
+        selectedEssay = d;
         showPanel(d);
         highlightConnections(d);
         
-        // Smooth pan to node
+        // Pan to node
         const transform = d3.zoomTransform(svg.node());
-        svg.transition().duration(750).call(
+        svg.transition().duration(600).call(
           zoom.transform,
           d3.zoomIdentity
             .translate(width / 2, height / 2)
@@ -661,9 +1171,75 @@
             .translate(-d.x, -d.y)
         );
       }
-    }
+    };
     
-    // Simulation tick
+    // ============================================
+    // MODE SWITCHING
+    // ============================================
+    
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const mode = btn.dataset.mode;
+        if (mode === 'concepts') {
+          // Show concept list in a simple way for now
+          // Could build a full concept visualization mode
+          const conceptList = keyConcepts.map(c => `${c.name}: ${c.essays.length} essays`).join('\n');
+          console.log('Concepts:', keyConcepts);
+        }
+      });
+    });
+    
+    // ============================================
+    // SEARCH
+    // ============================================
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        document.getElementById('search-container').classList.add('visible');
+        document.getElementById('search-input').focus();
+      }
+      if (e.key === 'Escape') {
+        document.getElementById('search-container').classList.remove('visible');
+        closePanel();
+        closeConceptPanel();
+        selectedEssay = null;
+        selectedConcept = null;
+        resetHighlights();
+      }
+    });
+    
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      if (!query) {
+        resetHighlights();
+        return;
+      }
+      
+      const matches = essays.filter(essay => 
+        essay.title.toLowerCase().includes(query) ||
+        essay.concepts.some(c => c.toLowerCase().includes(query)) ||
+        essay.description.toLowerCase().includes(query)
+      );
+      
+      const matchIds = new Set(matches.map(m => m.id));
+      node.style("opacity", n => matchIds.has(n.id) ? 1 : 0.15);
+    });
+    
+    document.getElementById('search-input').addEventListener('blur', () => {
+      setTimeout(() => {
+        document.getElementById('search-container').classList.remove('visible');
+        if (!selectedEssay && !selectedConcept) resetHighlights();
+      }, 200);
+    });
+    
+    // ============================================
+    // SIMULATION TICK
+    // ============================================
+    
     simulation.on("tick", () => {
       link
         .attr("x1", d => d.source.x)
@@ -692,7 +1268,7 @@
       event.subject.fy = null;
     }
     
-    // Handle resize
+    // Resize
     window.addEventListener('resize', () => {
       const newWidth = window.innerWidth;
       const newHeight = window.innerHeight;
@@ -701,8 +1277,8 @@
       simulation.alpha(0.3).restart();
     });
     
-    // Initial zoom out slightly to show all
-    svg.call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(0.85));
+    // Initial view
+    svg.call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(0.9));
   </script>
 </body>
 </html>
