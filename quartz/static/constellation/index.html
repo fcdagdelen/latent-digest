@@ -263,7 +263,25 @@
       color: var(--text-dim);
       text-align: right;
       z-index: 5;
-      pointer-events: none;
+      pointer-events: auto;
+    }
+    
+    .surprise-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.15));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 100px;
+      color: rgba(255,255,255,0.7);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .surprise-btn:hover {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(236, 72, 153, 0.25));
+      color: #fff;
+      transform: translateY(-1px);
     }
     
     /* Detail panel */
@@ -660,8 +678,8 @@
   </div>
   
   <div class="instructions">
-    drag to explore · click for details · scroll to zoom<br>
-    press / to search
+    <span class="surprise-btn" onclick="surpriseMe()">✨ surprise me</span><br>
+    drag to explore · scroll to zoom · / to search
   </div>
   
   <div id="detail-panel" class="detail-panel">
@@ -1361,6 +1379,15 @@
     window.hideBigPicture = function() {
       document.getElementById('overlay').classList.remove('visible');
       document.getElementById('big-picture').classList.remove('visible');
+    };
+    
+    // ============================================
+    // SURPRISE ME - RANDOM EXPLORATION
+    // ============================================
+    
+    window.surpriseMe = function() {
+      const randomEssay = essays[Math.floor(Math.random() * essays.length)];
+      focusNode(randomEssay.id);
     };
     
     // ============================================
