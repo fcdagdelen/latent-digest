@@ -442,6 +442,25 @@
       flex-shrink: 0;
     }
     
+    .read-full-btn {
+      display: block;
+      text-align: center;
+      padding: 12px 20px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.1));
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: 8px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .read-full-btn:hover {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(236, 72, 153, 0.15));
+      transform: translateY(-1px);
+    }
+    
     /* Concept panel */
     .concept-panel {
       position: fixed;
@@ -656,7 +675,7 @@
   <div class="header">
     <div class="header-left">
       <h1>Archive Fever</h1>
-      <p>22 essays · emergent ontology · threshold structures</p>
+      <p>22 essays · 65 connections · emergent ontology</p>
     </div>
     <div class="header-right">
       <div class="mode-toggle">
@@ -704,6 +723,9 @@
       <div class="panel-section">
         <div class="section-title">Connected Essays</div>
         <div id="panel-connections" class="connections-list"></div>
+      </div>
+      <div class="panel-section">
+        <a id="panel-link" href="#" target="_blank" class="read-full-btn">Read Full Essay →</a>
       </div>
     </div>
   </div>
@@ -1282,6 +1304,7 @@
       document.getElementById('panel-category').style.color = categoryColors[d.category];
       document.getElementById('panel-description').textContent = d.description;
       document.getElementById('panel-quote').textContent = d.quote;
+      document.getElementById('panel-link').href = `https://fcdagdelen.github.io/archive-fever/${d.id}`;
       
       // Concepts
       const conceptsDiv = document.getElementById('panel-concepts');
