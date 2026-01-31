@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Archive Fever · Reading Paths</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #06060a;
+      --surface: rgba(15, 15, 25, 0.95);
+      --border: rgba(255,255,255,0.08);
+      --text: #e8e8e8;
+      --text-muted: rgba(255,255,255,0.5);
+      --text-dim: rgba(255,255,255,0.3);
+      --accent: #8b5cf6;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: var(--bg);
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    header {
+      margin-bottom: 60px;
+    }
+    
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.85rem;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    
+    .back-link:hover {
+      opacity: 1;
+    }
+    
+    .path-section {
+      margin-bottom: 60px;
+    }
+    
+    .path-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    
+    .path-number {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+    }
+    
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 500;
+    }
+    
+    .path-description {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      max-width: 700px;
+    }
+    
+    .path-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    
+    .path-step {
+      display: flex;
+      align-items: stretch;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+    
+    .path-step:hover {
+      border-color: rgba(255,255,255,0.15);
+      background: rgba(20, 20, 35, 0.95);
+    }
+    
+    .step-number {
+      width: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.02);
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-right: 1px solid var(--border);
+    }
+    
+    .step-content {
+      flex: 1;
+      padding: 16px 20px;
+    }
+    
+    .step-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    
+    .step-insight {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    
+    .step-link {
+      width: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0;
+      transition: opacity 0.2s;
+      background: rgba(139, 92, 246, 0.05);
+    }
+    
+    .path-step:hover .step-link {
+      opacity: 1;
+    }
+    
+    .connector {
+      width: 2px;
+      height: 24px;
+      background: linear-gradient(to bottom, var(--border), transparent);
+      margin-left: 24px;
+    }
+    
+    .key-insight {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.05));
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-top: 16px;
+    }
+    
+    .key-insight-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    
+    .key-insight-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.8);
+    }
+    
+    @media (max-width: 600px) {
+      body { padding: 24px 16px; }
+      h1 { font-size: 1.4rem; }
+      h2 { font-size: 1.1rem; }
+      .step-link { width: 60px; font-size: 0.65rem; opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Reading Paths</h1>
+      <p class="subtitle">Curated journeys through Archive Fever's intellectual territory</p>
+      <a href="index.html" class="back-link">← Back to Constellation</a>
+    </header>
+    
+    <section class="path-section">
+      <div class="path-header">
+        <span class="path-number">Path 01</span>
+        <h2>The Emergent Ontology Thread</h2>
+      </div>
+      <p class="path-description">
+        How knowledge structures should arise from use rather than upfront design. From event sourcing foundations to practical RAG implementations.
+      </p>
+      
+      <div class="path-steps">
+        <div class="path-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <div class="step-title">Tristero: Event-Sourced Knowledge</div>
+            <div class="step-insight">The core architecture: event store as truth, projections as interpretation, reflection as governance.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/tristero" class="step-link" target="_blank">Read →</a>
+        </div>
+        
+        <div class="connector"></div>
+        
+        <div class="path-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <div class="step-title">Dynamic Knowledge Graphs</div>
+            <div class="step-insight">Living bases that evolve through use. Small model + frontier LLM orchestration.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/dynamic-knowledge-graphs" class="step-link" target="_blank">Read →</a>
+        </div>
+        
+        <div class="connector"></div>
+        
+        <div class="path-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <div class="step-title">Advanced RAG Architectures</div>
+            <div class="step-insight">Hypergraph memory, crystallization patterns, RL rewards for relational density.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/advanced-rag-architectures" class="step-link" target="_blank">Read →</a>
+        </div>
+        
+        <div class="connector"></div>
+        
+        <div class="path-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <div class="step-title">Infrastructure Tradeoffs</div>
+            <div class="step-insight">The Bitter Lesson: light scaffolding beats heavy validation for semantic judgment.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/infrastructure-tradeoffs-agent-architecture" class="step-link" target="_blank">Read →</a>
+        </div>
+      </div>
+      
+      <div class="key-insight">
+        <div class="key-insight-label">Core Principle</div>
+        <div class="key-insight-text">"Build in only the meta-methods that can find and capture complexity, not the complexity itself."</div>
+      </div>
+    </section>
+    
+    <section class="path-section">
+      <div class="path-header">
+        <span class="path-number">Path 02</span>
+        <h2>The Psyche-Computer Interface</h2>
+      </div>
+      <p class="path-description">
+        Using language and behavior as windows to inner states. From theoretical foundations to concrete architectures.
+      </p>
+      
+      <div class="path-steps">
+        <div class="path-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <div class="step-title">Psyche-Computer Interface</div>
+            <div class="step-insight">The mirror that listens—systems treating words as reflections of inner world.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/psyche-computer-interface" class="step-link" target="_blank">Read →</a>
+        </div>
+        
+        <div class="connector"></div>
+        
+        <div class="path-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <div class="step-title">Reasoning Traces & Psyche</div>
+            <div class="step-insight">Chain-of-thought as psychological material. Analyst agents on the unconscious of AI.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/reasoning-traces-psyche" class="step-link" target="_blank">Read →</a>
+        </div>
+        
+        <div class="connector"></div>
+        
+        <div class="path-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <div class="step-title">Triple Network Model</div>
+            <div class="step-insight">Menon's DMN/FPN/SN as cognitive architecture template. The switching problem.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/triple-network-model" class="step-link" target="_blank">Read →</a>
+        </div>
+        
+        <div class="connector"></div>
+        
+        <div class="path-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <div class="step-title">Psyche-Polis</div>
+            <div class="step-insight">Journal entries become navigable cities. Freud's impossible Rome meets ECS.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/psyche-polis" class="step-link" target="_blank">Read →</a>
+        </div>
+      </div>
+      
+      <div class="key-insight">
+        <div class="key-insight-label">Core Principle</div>
+        <div class="key-insight-text">"The city must mirror the soul's organization, not merely illustrate its contents."</div>
+      </div>
+    </section>
+    
+    <section class="path-section">
+      <div class="path-header">
+        <span class="path-number">Path 03</span>
+        <h2>Threshold Structures & Transformation</h2>
+      </div>
+      <p class="path-description">
+        Systems that enable change without destruction. The liminal spaces where becoming is possible.
+      </p>
+      
+      <div class="path-steps">
+        <div class="path-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <div class="step-title">Bidirectional Context</div>
+            <div class="step-insight">Context as membrane of mutual becoming. Simondon: individuals consist in relations.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/bidirectional-context" class="step-link" target="_blank">Read →</a>
+        </div>
+        
+        <div class="connector"></div>
+        
+        <div class="path-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <div class="step-title">Visible Cognition</div>
+            <div class="step-insight">Process as artifact. The phenomenology of streaming text and earned arrival.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/visible-cognition" class="step-link" target="_blank">Read →</a>
+        </div>
+        
+        <div class="connector"></div>
+        
+        <div class="path-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <div class="step-title">Ontological Composition</div>
+            <div class="step-insight">Warburg's iconology of intervals. Meaning through constellation, not hierarchy.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/ontological-composition" class="step-link" target="_blank">Read →</a>
+        </div>
+        
+        <div class="connector"></div>
+        
+        <div class="path-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <div class="step-title">Generative AI Design</div>
+            <div class="step-insight">The best AI interface is a threshold—a liminal space where transformation becomes possible.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/generative-ai-design-language" class="step-link" target="_blank">Read →</a>
+        </div>
+      </div>
+      
+      <div class="key-insight">
+        <div class="key-insight-label">Core Principle</div>
+        <div class="key-insight-text">"The context window isn't where thinking happens; it's part of what thinking is."</div>
+      </div>
+    </section>
+    
+    <section class="path-section">
+      <div class="path-header">
+        <span class="path-number">Path 04</span>
+        <h2>Memory, Dreams & Consolidation</h2>
+      </div>
+      <p class="path-description">
+        What to remember, what to forget, and how transformation happens in between.
+      </p>
+      
+      <div class="path-steps">
+        <div class="path-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <div class="step-title">Memory Architectures</div>
+            <div class="step-insight">Comparing how ChatGPT, Claude, and Gemini approach persistence and recall.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/memory-architectures-frontier-ai" class="step-link" target="_blank">Read →</a>
+        </div>
+        
+        <div class="connector"></div>
+        
+        <div class="path-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <div class="step-title">Semantic Retrieval & Memory</div>
+            <div class="step-insight">Dynamic thresholds, forgetting mechanisms. Forgetting is curation, not failure.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/semantic-retrieval-memory" class="step-link" target="_blank">Read →</a>
+        </div>
+        
+        <div class="connector"></div>
+        
+        <div class="path-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <div class="step-title">Artificial Dream Systems</div>
+            <div class="step-insight">Recombining experiences offline. Dreams bootstrap abstraction—sandbox for concept space.</div>
+          </div>
+          <a href="https://fcdagdelen.github.io/archive-fever/artificial-dream-systems" class="step-link" target="_blank">Read →</a>
+        </div>
+      </div>
+      
+      <div class="key-insight">
+        <div class="key-insight-label">Core Principle</div>
+        <div class="key-insight-text">"Creative dreaming can bootstrap abstraction. The dreams serve as a sandbox for exploring concept space—making surprising connections that weren't explicit in the input data."</div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
