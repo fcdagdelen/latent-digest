@@ -97,6 +97,7 @@
       transition: all 0.2s;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      text-decoration: none;
     }
     
     .mode-btn.active {
@@ -106,6 +107,104 @@
     
     .mode-btn:hover:not(.active) {
       color: rgba(255,255,255,0.7);
+    }
+    
+    /* Big picture panel */
+    .big-picture {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      width: 90%;
+      max-width: 700px;
+      max-height: 85vh;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      z-index: 200;
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .big-picture.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    
+    .big-picture-header {
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .big-picture-header h2 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    
+    .big-picture-header p {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+    
+    .big-picture-content {
+      padding: 24px 28px;
+      overflow-y: auto;
+      max-height: calc(85vh - 100px);
+    }
+    
+    .big-picture-section {
+      margin-bottom: 24px;
+    }
+    
+    .big-picture-section:last-child {
+      margin-bottom: 0;
+    }
+    
+    .big-picture-section h3 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    
+    .big-picture-section p {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.75);
+    }
+    
+    .big-picture-section blockquote {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.6);
+      font-style: italic;
+      padding-left: 16px;
+      border-left: 2px solid var(--accent);
+      margin: 12px 0;
+    }
+    
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 150;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    
+    .overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
     }
     
     /* Canvas container */
@@ -482,6 +581,18 @@
       pointer-events: none;
     }
     
+    /* Keyboard hints */
+    kbd {
+      display: inline-block;
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-muted);
+    }
+    
     /* Responsive */
     @media (max-width: 900px) {
       .detail-panel {
@@ -508,8 +619,8 @@
     </div>
     <div class="header-right">
       <div class="mode-toggle">
-        <button class="mode-btn active" data-mode="essays">Essays</button>
-        <button class="mode-btn" data-mode="concepts">Concepts</button>
+        <button class="mode-btn" onclick="showBigPicture()">Overview</button>
+        <a href="paths.html" class="mode-btn">Paths</a>
       </div>
     </div>
   </div>
@@ -570,6 +681,48 @@
   
   <div class="search-container" id="search-container">
     <input type="text" class="search-input" id="search-input" placeholder="Search essays and concepts...">
+  </div>
+  
+  <div class="overlay" id="overlay" onclick="hideBigPicture()"></div>
+  
+  <div class="big-picture" id="big-picture">
+    <div class="big-picture-header">
+      <h2>Archive Fever: The Big Picture</h2>
+      <p>22 essays on emergent ontology, psyche-computer interfaces, and threshold structures</p>
+    </div>
+    <div class="big-picture-content">
+      <div class="big-picture-section">
+        <h3>Core Philosophy</h3>
+        <p>These essays circle around a central conviction: <strong>knowledge structures should emerge from use rather than being imposed upfront</strong>. Categories, relationships, and hierarchies should crystallize through observation and reflection, not design.</p>
+        <blockquote>"The paradox at the heart of knowledge systems: you need structure to make information useful, but the structure you need keeps changing as you learn."</blockquote>
+      </div>
+      
+      <div class="big-picture-section">
+        <h3>Key Projects</h3>
+        <p><strong>LACE</strong> — A knowledge management system where ontology emerges through 4 layers: fragments → propositions → patterns → projects. Event-sourced, so all history is preserved.<br><br>
+        <strong>PCI</strong> — Psyche-Computer Interface. Systems that treat language as a window to inner states. The "mirror that listens."<br><br>
+        <strong>Tristero</strong> — Event-sourced knowledge where reflection governs ontology evolution. Propose → Critique → Execute.</p>
+      </div>
+      
+      <div class="big-picture-section">
+        <h3>Threshold Structures</h3>
+        <p>A recurring concept informed by Circassian/Ottoman displacement history: systems that enable transformation without destruction. Liminal spaces—like the historical caravanserai—where different maps can coexist without forcing premature synthesis.</p>
+        <blockquote>"The best AI interface is a threshold—a liminal space where transformation becomes possible."</blockquote>
+      </div>
+      
+      <div class="big-picture-section">
+        <h3>Intellectual Threads</h3>
+        <p>• <strong>Warburg's Mnemosyne Atlas</strong> — Meaning through constellation, not hierarchy. The iconology of intervals.<br>
+        • <strong>Simondon's individuation</strong> — Individuals consist in relations. Context as membrane of mutual becoming.<br>
+        • <strong>The Bitter Lesson</strong> — Build meta-methods that find complexity, not the complexity itself.<br>
+        • <strong>Visible Cognition</strong> — Process as artifact. Streaming text creates presence and the sensation of witnessing thought unfold.</p>
+      </div>
+      
+      <div class="big-picture-section">
+        <h3>Navigate</h3>
+        <p>Click any essay node to explore its connections and key insights. Press <kbd>/</kbd> to search. Or explore the <a href="paths.html" style="color: var(--accent);">curated reading paths</a>.</p>
+      </div>
+    </div>
   </div>
   
   <div id="canvas-container"></div>
@@ -1174,23 +1327,18 @@
     };
     
     // ============================================
-    // MODE SWITCHING
+    // BIG PICTURE OVERLAY
     // ============================================
     
-    document.querySelectorAll('.mode-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        
-        const mode = btn.dataset.mode;
-        if (mode === 'concepts') {
-          // Show concept list in a simple way for now
-          // Could build a full concept visualization mode
-          const conceptList = keyConcepts.map(c => `${c.name}: ${c.essays.length} essays`).join('\n');
-          console.log('Concepts:', keyConcepts);
-        }
-      });
-    });
+    window.showBigPicture = function() {
+      document.getElementById('overlay').classList.add('visible');
+      document.getElementById('big-picture').classList.add('visible');
+    };
+    
+    window.hideBigPicture = function() {
+      document.getElementById('overlay').classList.remove('visible');
+      document.getElementById('big-picture').classList.remove('visible');
+    };
     
     // ============================================
     // SEARCH
@@ -1204,6 +1352,7 @@
       }
       if (e.key === 'Escape') {
         document.getElementById('search-container').classList.remove('visible');
+        hideBigPicture();
         closePanel();
         closeConceptPanel();
         selectedEssay = null;
