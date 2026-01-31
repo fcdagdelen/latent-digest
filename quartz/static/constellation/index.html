@@ -569,6 +569,29 @@
       filter: url(#glow);
     }
     
+    /* Entrance animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    .node {
+      animation: fadeIn 0.6s ease-out;
+      animation-fill-mode: backwards;
+    }
+    
+    .node:nth-child(1) { animation-delay: 0.05s; }
+    .node:nth-child(2) { animation-delay: 0.1s; }
+    .node:nth-child(3) { animation-delay: 0.15s; }
+    .node:nth-child(4) { animation-delay: 0.2s; }
+    .node:nth-child(5) { animation-delay: 0.25s; }
+    .node:nth-child(6) { animation-delay: 0.3s; }
+    .node:nth-child(7) { animation-delay: 0.35s; }
+    .node:nth-child(8) { animation-delay: 0.4s; }
+    .node:nth-child(9) { animation-delay: 0.45s; }
+    .node:nth-child(10) { animation-delay: 0.5s; }
+    .node:nth-child(n+11) { animation-delay: 0.55s; }
+    
     /* Concept nodes (when in concept mode) */
     .concept-node {
       cursor: pointer;
@@ -1428,6 +1451,14 @@
     
     // Initial view
     svg.call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(0.9));
+    
+    // Show overview on first visit
+    if (!localStorage.getItem('archive-fever-visited')) {
+      setTimeout(() => {
+        showBigPicture();
+        localStorage.setItem('archive-fever-visited', 'true');
+      }, 1000);
+    }
   </script>
 </body>
 </html>
