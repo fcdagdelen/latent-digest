@@ -581,14 +581,14 @@
     
     /* SVG styles */
     .link {
-      stroke: rgba(255,255,255,0.06);
-      stroke-width: 1;
+      stroke: rgba(255,255,255,0.25);
+      stroke-width: 1.5;
       transition: all 0.3s;
     }
     
     .link.highlighted {
-      stroke: rgba(255,255,255,0.35);
-      stroke-width: 1.5;
+      stroke: rgba(255,255,255,0.6);
+      stroke-width: 2.5;
     }
     
     .link.concept-highlight {
@@ -1186,7 +1186,7 @@
       .data(links)
       .join("line")
       .attr("class", "link")
-      .attr("stroke-opacity", d => Math.min(d.strength * 0.4, 0.5));
+      .attr("stroke-opacity", d => Math.min(d.strength * 0.8 + 0.3, 0.9));
     
     // Nodes
     const node = g.append("g")
